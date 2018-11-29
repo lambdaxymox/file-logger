@@ -69,7 +69,9 @@ impl log::Log for FileLogger {
 ///
 /// Initialize a file logger with the specified logging level.
 ///
-pub fn init_with_level(log_file: &str, level: log::Level) -> Result<(), log::SetLoggerError> {
+pub fn init_with_level<P: AsRef<Path>>(
+    log_file: P, level: log::Level) -> Result<(), log::SetLoggerError> {
+    
     let logger = FileLogger::new(log_file, level);
     log::set_boxed_logger(Box::new(logger))?;
     log::set_max_level(level.to_level_filter());
@@ -79,6 +81,6 @@ pub fn init_with_level(log_file: &str, level: log::Level) -> Result<(), log::Set
 ///
 /// Initialize a file logger that logs all messages by default.
 ///
-pub fn init(log_file: &str) -> Result<(), log::SetLoggerError> {
+pub fn init<P: AsRef<Path>>(log_file: P) -> Result<(), log::SetLoggerError> {
     init_with_level(log_file, log::Level::Trace)
 }
