@@ -6,7 +6,9 @@ use std::path::{Path, PathBuf};
 
 
 pub struct FileLogger {
+    /// The path to the logging file.
     log_file: PathBuf,
+    /// The logging level. This determines what level to filter messages at.
     level: log::Level,
 }
 
@@ -23,6 +25,9 @@ impl FileLogger {
 }
 
 impl log::Log for FileLogger {
+    ///
+    /// Determine whether a message would get logged.
+    ///
     fn enabled(&self, metadata: &log::Metadata) -> bool {
         metadata.level() <= self.level
     }
