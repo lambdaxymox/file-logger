@@ -1,0 +1,6 @@
+[package]
+name = "file_logger"
+version = "0.1.0"
+authors = ["Stallmanifold <stallmanifold@gmail.com>"]
+
+[dependencies]
