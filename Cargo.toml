@@ -4,3 +4,5 @@ version = "0.1.0"
 authors = ["Stallmanifold <stallmanifold@gmail.com>"]
 
 [dependencies]
+chrono = "0.4.6"
+log = "0.4.6"
