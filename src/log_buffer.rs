@@ -94,9 +94,9 @@ impl<Storage: AsRef<[u8]> + AsMut<[u8]>> LogBuffer<Storage> {
 }
 
 impl<Storage: AsRef<[u8]> + AsMut<[u8]>> fmt::Write for LogBuffer<Storage> {
-    fn write_str(&mut self, s: &str) -> core::fmt::Result {
-        for &b in s.as_bytes() {
-            self.buffer.as_mut()[self.position] = b;
+    fn write_str(&mut self, st: &str) -> fmt::Result {
+        for &byte in st.as_bytes() {
+            self.buffer.as_mut()[self.position] = byte;
             if self.end >= self.buffer.len() - 1 {
                 self.wrapped = true;
             }
