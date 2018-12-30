@@ -35,6 +35,18 @@ impl<Storage: AsRef<[u8]> + AsMut<[u8]>> LogBuffer<Storage> {
         (self.start == self.end) && !self.wrapped
     }
 
+    pub fn len(&self) -> usize {
+        unimplemented!();
+    }
+
+    pub fn is_full(&self) -> bool {
+        self.len() == self.capacity()
+    }
+
+    pub fn capacity(&self) -> usize {
+        self.buffer.len()
+    }
+
     fn rotate(&mut self) {
         if self.wrapped && (self.start == self.end) {
             self.buffer.rotate_left(self.end);
