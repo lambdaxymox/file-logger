@@ -37,9 +37,9 @@ impl<Storage: AsRef<[u8]> + AsMut<[u8]>> LogBuffer<Storage> {
 
     fn rotate(&mut self) {
         if self.wrapped && (self.end <= self.start) {
-
+            self.buffer.rotate_left(self.end);
         } else if self.wrapped && (self.end > self.start) {
-
+            self.buffer.rotate_left(self.end);
         } else {
 
         }
@@ -51,9 +51,7 @@ impl<Storage: AsRef<[u8]> + AsMut<[u8]>> LogBuffer<Storage> {
                 byte & 0b11110000 == 0b11100000 || byte & 0b11111000 == 0b11110000
         }
 
-        if self.wrapped {
-            self.rotate();
-        }
+        self.rotate();
 
         let buffer = self.buffer.as_mut();
         for i in 0..buffer.len() {
@@ -64,4 +62,8 @@ impl<Storage: AsRef<[u8]> + AsMut<[u8]>> LogBuffer<Storage> {
 
         ""
     }
+}
+
+impl<Storage: AsRef<[u8]> + AsMut<[u8]>> fmt::Write for LogBuffer<Storage> {
+
 }
