@@ -102,6 +102,7 @@ impl<Storage: AsRef<[u8]> + AsMut<[u8]>> fmt::Write for LogBuffer<Storage> {
             }
             self.end = (self.end + 1) % self.buffer.as_mut().len();
         }
+
         Ok(())
     }
 }
