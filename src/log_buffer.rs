@@ -36,19 +36,36 @@ impl<Storage: AsRef<[u8]> + AsMut<[u8]>> LogBuffer<Storage> {
     }
 
     fn rotate(&mut self) {
-        if self.wrapped && (self.end <= self.start) {
+        if self.wrapped && (self.start == self.end) {
             self.buffer.rotate_left(self.end);
-        } else if self.wrapped && (self.end > self.start) {
+            self.wrapped = false;
+            self.start = 0;
+            self.end = self.buffer.len() - 1;
+        } else if self.start < self.end {
+            self.buffer.rotate_left(self.start);
+            self.wrapped = false;
+            self.end -= start;
+            self.start = 0;
+        } else if self.start > self.end {
             self.buffer.rotate_left(self.end);
+            self.wrapped = false;
+            self.start -= self.end;
+            self.end = self.buffer.len() - 1;
+            self.buffer.rotate_left(self.start);
+            self.end -= self.start;
+            self.start = 0;
         } else {
-
+            self.buffer.rotate_left(self.start);
+            self.wrapped = false;
+            self.start = 0;
+            self.end = 0;
         }
     }
 
     pub fn extract(&mut self) -> &str {
         fn is_utf8_leader(byte: u8) -> bool {
             byte & 0b10000000 == 0b00000000 || byte & 0b11100000 == 0b11000000 ||
-                byte & 0b11110000 == 0b11100000 || byte & 0b11111000 == 0b11110000
+            byte & 0b11110000 == 0b11100000 || byte & 0b11111000 == 0b11110000
         }
 
         self.rotate();
