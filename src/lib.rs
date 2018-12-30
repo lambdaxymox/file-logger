@@ -6,4 +6,4 @@ extern crate log;
 
 mod file_logger;
 
-pub use file_logger::*;
+pub use self::file_logger::*;
