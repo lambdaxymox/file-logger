@@ -37,9 +37,9 @@ impl FileWriter {
     fn write(&mut self, record: &log::Record, file: &Path) {
         let date = Utc::now();
         self.date_buffer.clear();
-        write!(self.date_buffer, "[{}]", date);
+        write!(self.date_buffer, "[{}]", date).unwrap();
         self.record_buffer.clear();
-        write!(self.record_buffer, "{}", record.args());
+        write!(self.record_buffer, "{}", record.args()).unwrap();
 
         let len_date = self.date_buffer.len();
         let len_text = self.record_buffer.len();
