@@ -51,7 +51,7 @@ impl FileWriter {
         writeln!(
             self.buffer,
             "{} {}", self.date_buffer.extract(), self.record_buffer.extract()
-        );
+        ).unwrap();
     }
 
     fn flush(&mut self, log_file: &Path) {
