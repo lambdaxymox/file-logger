@@ -5,6 +5,7 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 
+#[derive(Debug)]
 pub struct FileLogger {
     /// The path to the logging file.
     log_file: PathBuf,
