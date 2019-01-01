@@ -3,7 +3,6 @@
 
 extern crate chrono;
 extern crate log;
-extern crate log_buffer;
 
 mod file_logger;
 mod file_writer;
