@@ -6,5 +6,6 @@ extern crate log;
 extern crate log_buffer;
 
 mod file_logger;
+mod file_writer;
 
 pub use self::file_logger::*;
