@@ -26,7 +26,7 @@ impl FileWriter {
             .open(&self.file)?;
 
         let date = Utc::now();
-        let result = write!(file, "[{}] {}", date, record.args());
+        let result = writeln!(file, "[{}] {}", date, record.args());
 
         result
     }
