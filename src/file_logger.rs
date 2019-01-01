@@ -40,8 +40,8 @@ impl log::Log for FileLogger {
     ///
     fn log(&self, record: &log::Record) {
         if self.enabled(record.metadata()) {
-            let lock = self.writer.as_ref();
-            let mut writer = lock.write().unwrap();
+            let guard = self.writer.as_ref();
+            let mut writer = guard.write().unwrap();
             writer.write(record, &self.log_file);
         }
     }
@@ -51,8 +51,8 @@ impl log::Log for FileLogger {
     /// information in a log file before the logger goes out of scope.
     ///
     fn flush(&self) {
-        let lock = self.writer.as_ref();
-        let mut writer = lock.write().unwrap();
+        let guard = self.writer.as_ref();
+        let mut writer = guard.write().unwrap();
         writer.flush(&self.log_file);
     }
 }
