@@ -6,8 +6,6 @@ use std::sync::{Arc, RwLock};
 
 #[derive(Debug)]
 pub struct FileLogger {
-    /// The path to the logging file.
-    log_file: PathBuf,
     /// The logging level. This determines what level to filter messages at.
     level: log::Level,
     /// The file writer. The endpoint where the messages are written.
@@ -20,9 +18,10 @@ impl FileLogger {
     ///
     pub fn new<P: AsRef<Path>>(log_file: P, level: log::Level) -> FileLogger {
         FileLogger {
-            log_file: log_file.as_ref().to_path_buf(),
             level: level,
-            writer: Arc::new(RwLock::new(FileWriter::new())),
+            writer: Arc::new(RwLock::new(
+                FileWriter::new(log_file.as_ref().to_path_buf(),))
+            ),
         }
     }
 }
@@ -41,8 +40,8 @@ impl log::Log for FileLogger {
     fn log(&self, record: &log::Record) {
         if self.enabled(record.metadata()) {
             let guard = self.writer.as_ref();
-            let mut writer = guard.write().unwrap();
-            writer.write(record, &self.log_file).unwrap();
+            let writer = guard.write().unwrap();
+            writer.write(record).unwrap();
         }
     }
 
@@ -52,8 +51,8 @@ impl log::Log for FileLogger {
     ///
     fn flush(&self) {
         let guard = self.writer.as_ref();
-        let mut writer = guard.write().unwrap();
-        writer.flush(&self.log_file).unwrap();
+        let writer = guard.write().unwrap();
+        writer.flush().unwrap();
     }
 }
 

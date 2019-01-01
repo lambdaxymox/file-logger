@@ -3,23 +3,28 @@ use std::fmt::Write as FmtWrite;
 use std::fs::OpenOptions;
 use std::io;
 use std::io::Write as IoWrite;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 
 #[derive(Debug)]
-pub struct FileWriter {}
+pub struct FileWriter {
+    /// The path to the logging file.
+    file: PathBuf,
+}
 
 impl FileWriter {
-    pub fn new() -> FileWriter {
-        FileWriter {}
+    pub fn new(file: PathBuf) -> FileWriter {
+        FileWriter {
+            file: file,
+        }
     }
 
-    pub fn write(&self, record: &log::Record, file: &Path) -> io::Result<()> {
+    pub fn write(&self, record: &log::Record) -> io::Result<()> {
         let mut file = OpenOptions::new()
             .write(true)
             .append(true)
             .create(true)
-            .open(file)?;
+            .open(&self.file)?;
 
         let date = Utc::now();
         let result = write!(file, "[{}] {}", date, record.args());
@@ -27,7 +32,7 @@ impl FileWriter {
         result
     }
 
-    pub fn flush(&self, log_file: &Path) -> io::Result<()> {
+    pub fn flush(&self) -> io::Result<()> {
         Ok(())
     }
 }
