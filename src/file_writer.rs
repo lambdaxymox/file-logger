@@ -2,6 +2,7 @@ use chrono::prelude::Utc;
 use log_buffer::LogBuffer;
 use std::fmt::Write as FmtWrite;
 use std::fs::OpenOptions;
+use std::io;
 use std::io::Write as IoWrite;
 use std::path::Path;
 
@@ -32,7 +33,7 @@ impl FileWriter {
         }
     }
 
-    pub fn write(&mut self, record: &log::Record, file: &Path) {
+    pub fn write(&mut self, record: &log::Record, file: &Path) -> io::Result<()> {
         let date = Utc::now();
         self.date_buffer.clear();
         write!(self.date_buffer, "[{}]", date).unwrap();
@@ -49,27 +50,21 @@ impl FileWriter {
         writeln!(
             self.buffer,
             "{} {}", self.date_buffer.extract(), self.record_buffer.extract()
-        ).unwrap();
+        );
+
+        Ok(())
     }
 
-    pub fn flush(&mut self, log_file: &Path) {
-        let file = OpenOptions::new()
+    pub fn flush(&mut self, log_file: &Path) -> io::Result<()> {
+        let mut file = OpenOptions::new()
             .write(true)
             .append(true)
             .create(true)
-            .open(log_file);
+            .open(log_file)?;
 
-        if file.is_err() {
-            eprintln!(
-                "ERROR: Could not open the file {} for writing.",
-                log_file.display()
-            );
-
-            return;
-        }
-
-        let mut file = file.unwrap();
-        write!(file, "{}", self.buffer.extract()).unwrap();
+        let result = write!(file, "{}", self.buffer.extract());
         self.buffer.clear();
+
+        result
     }
 }
