@@ -42,7 +42,7 @@ impl log::Log for FileLogger {
         if self.enabled(record.metadata()) {
             let guard = self.writer.as_ref();
             let mut writer = guard.write().unwrap();
-            writer.write(record, &self.log_file);
+            writer.write(record, &self.log_file).unwrap();
         }
     }
 
@@ -53,7 +53,7 @@ impl log::Log for FileLogger {
     fn flush(&self) {
         let guard = self.writer.as_ref();
         let mut writer = guard.write().unwrap();
-        writer.flush(&self.log_file);
+        writer.flush(&self.log_file).unwrap();
     }
 }
 

@@ -34,37 +34,19 @@ impl FileWriter {
     }
 
     pub fn write(&mut self, record: &log::Record, file: &Path) -> io::Result<()> {
-        let date = Utc::now();
-        self.date_buffer.clear();
-        write!(self.date_buffer, "[{}]", date).unwrap();
-        self.record_buffer.clear();
-        write!(self.record_buffer, "{}", record.args()).unwrap();
-
-        let len_date = self.date_buffer.len();
-        let len_text = self.record_buffer.len();
-        let len_record = len_date + len_text + 2;
-        if len_record >= self.buffer.space_remaining() {
-            self.flush(file);
-        }
-
-        writeln!(
-            self.buffer,
-            "{} {}", self.date_buffer.extract(), self.record_buffer.extract()
-        );
-
-        Ok(())
-    }
-
-    pub fn flush(&mut self, log_file: &Path) -> io::Result<()> {
         let mut file = OpenOptions::new()
             .write(true)
             .append(true)
             .create(true)
-            .open(log_file)?;
+            .open(file)?;
 
-        let result = write!(file, "{}", self.buffer.extract());
-        self.buffer.clear();
+        let date = Utc::now();
+        let result = write!(file, "[{}] {}", date, record.args());
 
         result
+    }
+
+    pub fn flush(&self, log_file: &Path) -> io::Result<()> {
+        Ok(())
     }
 }
