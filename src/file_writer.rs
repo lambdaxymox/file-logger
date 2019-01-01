@@ -1,9 +1,8 @@
 use chrono::prelude::Utc;
-use std::fmt::Write as FmtWrite;
 use std::fs::OpenOptions;
 use std::io;
 use std::io::Write as IoWrite;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 
 #[derive(Debug)]

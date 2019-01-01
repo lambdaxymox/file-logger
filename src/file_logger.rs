@@ -1,6 +1,6 @@
 use crate::file_writer::FileWriter;
 use log;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::sync::{Arc, RwLock};
 
 
