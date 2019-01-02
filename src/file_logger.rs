@@ -40,7 +40,7 @@ impl log::Log for FileLogger {
     fn log(&self, record: &log::Record) {
         if self.enabled(record.metadata()) {
             let guard = self.writer.as_ref();
-            let writer = guard.write().unwrap();
+            let mut writer = guard.write().unwrap();
             writer.write(record).unwrap();
         }
     }
