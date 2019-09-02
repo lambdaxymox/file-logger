@@ -13,9 +13,7 @@ pub struct FileLogger {
 }
 
 impl FileLogger {
-    ///
     /// Create a new logger.
-    ///
     pub fn new<P: AsRef<Path>>(log_file: P, level: log::Level) -> FileLogger {
         FileLogger {
             level: level,
@@ -27,16 +25,12 @@ impl FileLogger {
 }
 
 impl log::Log for FileLogger {
-    ///
     /// Determine whether a message would get logged.
-    ///
     fn enabled(&self, metadata: &log::Metadata) -> bool {
         metadata.level() <= self.level
     }
 
-    ///
     /// Write a message to the log file.
-    ///
     fn log(&self, record: &log::Record) {
         if self.enabled(record.metadata()) {
             let guard = self.writer.as_ref();
@@ -45,10 +39,8 @@ impl log::Log for FileLogger {
         }
     }
 
-    ///
     /// Finish writing to a log. This function is used to place any final
     /// information in a log file before the logger goes out of scope.
-    ///
     fn flush(&self) {
         let guard = self.writer.as_ref();
         let writer = guard.write().unwrap();
@@ -56,9 +48,7 @@ impl log::Log for FileLogger {
     }
 }
 
-///
 /// Initialize a file logger with the specified logging level.
-///
 pub fn init_with_level<P: AsRef<Path>>(
     log_file: P, level: log::Level) -> Result<(), log::SetLoggerError> {
     
@@ -69,9 +59,7 @@ pub fn init_with_level<P: AsRef<Path>>(
     Ok(())
 }
 
-///
 /// Initialize a file logger that logs all messages by default.
-///
 pub fn init<P: AsRef<Path>>(log_file: P) -> Result<(), log::SetLoggerError> {
     init_with_level(log_file, log::Level::Trace)
 }

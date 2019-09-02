@@ -1,11 +1,11 @@
 [package]
 name = "file_logger"
-version = "0.4.3"
+version = "0.4.4"
 authors = ["LambdaXymox <lambda.xymox@gmail.com>"]
 edition = "2018"
 description = "A logger that outputs all messages to a file."
 
 
 [dependencies]
-chrono = "0.4.6"
-log = { version = "0.4.6", features = ["std"] }
+chrono = "0.4.8"
+log = { version = "0.4.8", features = ["std"] }
