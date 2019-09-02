@@ -30,9 +30,16 @@ impl FileWriter {
     pub fn write(&mut self, record: &log::Record) -> io::Result<()> {
         let writer = self.writer.get_mut();
         let date = Utc::now();
-        let result = writeln!(writer, "[{}] {}", date, record.args());
+        let args = format!("{}", record.args());
+        for line in args.lines() {
+            let result = writeln!(writer, "[{}] {}", date, line);
+            if result.is_err() {
+                return result;
+            }
 
-        result
+        }
+        
+        Ok(())
     }
 
     pub fn flush(&self) -> io::Result<()> {
